@@ -12,7 +12,7 @@ namespace ariel
         numVertices = 0;
         numEdges = 0;
         isdirected = false;
-        adjacencyMatrix = {};
+        adjacencyMatrix = vector<vector<int>>(10, vector<int>(10, 0));// Initialize the matrix with 10x10 zeros
     }
 
     void Graph::loadGraph(vector<vector<int>> graph)
@@ -72,10 +72,15 @@ namespace ariel
             str += "[";
             for (size_t j = 0; j < getNumVertices(); j++)
             {
-                str += (getAdjacencyMatrix()[i][j] + " ");
+                str += to_string(getAdjacencyMatrix()[i][j]);
+                if(j!=getNumVertices()-1){
+                str += ",";
+                }
             }
             str += "]";
+            if(i!=getNumVertices()-1){
             str += "\n";
+            }
         }
         str += "}";
         return str;
@@ -279,38 +284,30 @@ namespace ariel
                 }
             }
         }
+        return true;
     }
 
     bool Graph::operator<(Graph &g)
     {
-        if (numVertices > g.getNumVertices() || numEdges > g.getNumEdges())
+        if (isContained(g,*this)) //check if this is contained in g
         {
-            return false;
+            return true;          
         }
-        if (numEdges < g.getNumEdges())
-        {
-            for (size_t i = 0; i < numVertices; i++)
-            {
-                for (size_t j = 0; j < numVertices; j++)
-                {
-                    if (adjacencyMatrix[i][j] != 0 && g.getAdjacencyMatrix()[i][j] == 0)
-                    {
-                        return false;
-                    }
-                }
-            }
+        if(this->getNumEdges() < g.getNumEdges()){
+            return true;
         }
         else if (numEdges == g.getNumEdges())
         {
-            if (numVertices > g.getNumVertices())
-            {
-                return false;
-            }
-            else
+            if (numVertices < g.getNumVertices())
             {
                 return true;
             }
+            else
+            {
+                return  false;
+            }
         }
+        return false;
     }
 
     bool Graph::operator>(Graph &g)
@@ -370,6 +367,21 @@ namespace ariel
         }
         os << "}";
         return os;
+    }
+    //check if g1 is contained in g2
+    bool Graph::isContained(Graph &g1, Graph &g2)
+    {
+        for (size_t i = 0; i < g1.getNumVertices(); i++)
+        {
+            for (size_t j = 0; j < g1.getNumVertices(); j++)
+            {
+                if (g2.getAdjacencyMatrix()[i][j]!=0 && g1.getAdjacencyMatrix()[i][j]==0) //if the bigger graph has a edge and the smaller graph deosnt
+                {
+                    return false; //the graph is not contained cause he is missing an edge
+                }
+            }
+        }
+        return true;
     }
 
 } // namespace ariel

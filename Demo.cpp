@@ -12,7 +12,7 @@ using ariel::Algorithms;
 #include <vector>
 using namespace std;
 
-int main()
+int mainY()
 {
     ariel::Graph g1;
     // 3x3 matrix that represents a connected graph.
@@ -59,4 +59,5 @@ int main()
     {
         cout << e.what() << endl; // Should print "The number of columns in the first matrix must be equal to the number of rows in the second matrix."
     }
+    return 0;
 }

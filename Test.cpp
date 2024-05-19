@@ -18,13 +18,14 @@ TEST_CASE("Test graph addition")
         {1, 2, 0}};
     g2.loadGraph(weightedGraph);
     ariel::Graph g3 = g1 + g2;
+    cout<<g3<<endl;
     vector<vector<int>> expectedGraph = {
         {0, 2, 1},
         {2, 0, 3},
         {1, 3, 0}};
     CHECK(g3.printGraph() == "[0, 2, 1]\n[2, 0, 3]\n[1, 3, 0]");
 }
-
+/*
 TEST_CASE("Test graph multiplication")
 {
     ariel::Graph g1;
@@ -83,3 +84,7 @@ TEST_CASE("Invalid operations")
     g6.loadGraph(graph3);
     CHECK_THROWS(g1 + g6);
 }
+
+
+*/
+

@@ -76,10 +76,10 @@ namespace ariel
         void operator--();
 
         // this function will return the graph after addung 1 to each edge in the graph
-        void Graph::operator++(int);
+        void operator++(int);
 
         // this function will return the graph after substracing 1 from each edge in the graph
-        void Graph::operator--(int);
+        void operator--(int);
 
         // this function will return if the two graphs are equal
         bool operator==(Graph &g);
@@ -94,13 +94,17 @@ namespace ariel
         bool operator>=(Graph &g);
 
         // this function will return if the other graph is lees than or equal than the  graph
-        bool Graph::operator<=(Graph &g);
+        bool operator<=(Graph &g);
 
         // this function will return if the other graph is not equal to the graph
-        bool Graph::operator!=(Graph &g);
+        bool operator!=(Graph &g);
+
+        // this function will check if g1 is contained in g2
+        bool Graph::isContained(Graph &g1, Graph &g2);
 
         // this function will print the graph
         friend ostream &operator<<(ostream &os, Graph &g);
+
     };
 }
 #endif
