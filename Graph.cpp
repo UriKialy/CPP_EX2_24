@@ -156,9 +156,122 @@ namespace ariel
         Graph Graph::operator-=(Graph &g){
             return *this-g;
         }
+    
         Graph Graph::operator-(){
-            return *this;
+            Graph graph;
+            for (size_t i = 0; i < numVertices; i++)
+            {
+                for (size_t j = 0; j < numVertices; j++)
+                {
+                    graph.getAdjacencyMatrix()[i][j]*=-1;
+                }
+            }
+            graph.loadGraph(adjacencyMatrix);
+            return graph;
+}
+ bool Graph::operator==(Graph &g)
+    {
+        if (!(*this >= g && *this <= g))
+        {
+            return true;
         }
+        else
+        {
+            if (numVertices != g.getNumVertices())
+            {
+                return false;
+            }
+            for (size_t i = 0; i < numVertices; i++)
+            {
+                for (size_t j = 0; j < numVertices; j++)
+                {
+                    if (adjacencyMatrix[i][j] != g.getAdjacencyMatrix()[i][j])
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
 
-        
+    bool Graph::operator<(Graph &g)
+    {
+        if (numVertices > g.getNumVertices()|| numEdges > g.getNumEdges())
+        {
+            return false;
+        }
+        else{
+               for (size_t i = 0; i < numVertices; i++)
+            {
+                for (size_t j = 0; j < numVertices; j++)
+                {
+                    if (adjacencyMatrix[i][j]   !=0 &&  g.getAdjacencyMatrix()[i][j]==0)
+                    {
+                        return false;
+                    }
+                }
+            }
+                        
+            if(numVertices>g.getNumVertices() || numEdges>g.getNumEdges())
+            {
+                return false;
+            }
+            return true;
+        } 
+   }
+
+    bool Graph::operator>(Graph &g){
+        return g<*this;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -56,6 +56,15 @@ namespace ariel
 
         // this func is an unary operator that will return the graph
         Graph operator-();
+
+        // this function will return if the two graphs are equal
+        bool operator==(Graph& g);
+
+        // this function will return if the graph is lees than the other graph
+        bool operator<(Graph& g);
+
+        // this function will return if the other graph is lees than the  graph
+        bool operator>(Graph& g);
     };
 }
 #endif
