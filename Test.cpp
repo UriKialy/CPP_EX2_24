@@ -83,8 +83,25 @@ TEST_CASE("Invalid operations")
         {1, 0, 0, 1, 0}};
     g6.loadGraph(graph3);
     CHECK_THROWS(g1 + g6);
+     CHECK_THROWS(g1 - g6);
 }
 
-
+TEST_CASE("Test graph multiplication by scalar")
+{
+    ariel::Graph g1;
+    vector<vector<int>> graph = {
+        {0, 1, 0},
+        {1, 0, 1},
+        {0, 1, 0}};
+    g1.loadGraph(graph);
+    ariel::Graph g2 = g1 * 2;
+    vector<vector<int>> expectedGraph = {
+        {0, 2, 0},
+        {2, 0, 2},
+        {0, 2, 0}};
+    CHECK(g2.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
+    ariel::Graph g3 = g1 / 2;
+    CHECK(g3.printGraph() == "[0, 1, 0]\n[1, 0, 1]\n[0, 1, 0]");
+}
 
 

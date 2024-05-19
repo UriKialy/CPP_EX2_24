@@ -142,16 +142,15 @@ namespace ariel
     Graph Graph::operator/(int scalar)
     {
         vector<vector<int>> GraphMat = getAdjacencyMatrix();
-        vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph graph;
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                newAdjacencyMatrix[i][j] = GraphMat[i][j] / scalar;
+                getAdjacencyMatrix()[i][j] /= scalar;
             }
         }
-        graph.loadGraph(newAdjacencyMatrix);
+        graph.loadGraph(GraphMat);
         return graph;
     }
     Graph Graph::operator/=(int scalar)
