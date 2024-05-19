@@ -100,7 +100,7 @@ namespace ariel
         bool operator!=(Graph &g);
 
         // this function will check if g1 is contained in g2
-        bool Graph::isContained(Graph &g1, Graph &g2);
+        bool isContained(Graph &g1, Graph &g2);
 
         // this function will print the graph
         friend ostream &operator<<(ostream &os, Graph &g);
