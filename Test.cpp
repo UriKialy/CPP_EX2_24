@@ -1,7 +1,6 @@
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"
-
 using namespace std;
 
 TEST_CASE("Test graph addition")

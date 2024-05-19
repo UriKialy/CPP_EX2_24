@@ -19,10 +19,10 @@ namespace ariel
         void loadGraph(vector<vector<int>> graph);
 
         // this function will print the graph
-        void printGraph();
+        string printGraph();
 
         // this function will return the adjacency matrix of the graph
-        std::vector<vector<int>> getAdjacencyMatrix();
+        vector<vector<int>> getAdjacencyMatrix();
 
         // this function will return the number of vertices in the graph
         size_t getNumVertices();
@@ -42,6 +42,18 @@ namespace ariel
         // this funcrion will return the graph after multiplying it by a scalar
         Graph operator*(int scalar);
 
+        // this funcrion will return the graph after multiplying it by a scalar
+        Graph operator*=(int scalar);
+
+        // this function will return the graph after multiplying it by another graph
+        Graph operator*(Graph &g);
+
+        // this function will return the graph after devideing it by a scalar
+        Graph operator/=(int scalar);
+
+        // this function will return the graph after devideing it by a scalar
+        Graph operator/(int scalar);
+
         // this function will return the graph after adding two graphs together
         Graph operator+(Graph &g);
 
@@ -57,14 +69,38 @@ namespace ariel
         // this func is an unary operator that will return the graph
         Graph operator-();
 
+        // this function will return the graph after addung 1 to each edge in the graph
+        void operator++();
+
+        // this function will return the graph after substracing 1 from each edge in the graph
+        void operator--();
+
+        // this function will return the graph after addung 1 to each edge in the graph
+        void Graph::operator++(int);
+
+        // this function will return the graph after substracing 1 from each edge in the graph
+        void Graph::operator--(int);
+
         // this function will return if the two graphs are equal
-        bool operator==(Graph& g);
+        bool operator==(Graph &g);
 
         // this function will return if the graph is lees than the other graph
-        bool operator<(Graph& g);
+        bool operator<(Graph &g);
 
         // this function will return if the other graph is lees than the  graph
-        bool operator>(Graph& g);
+        bool operator>(Graph &g);
+
+        // this function will return if the other graph is lees than or equal than the  graph
+        bool operator>=(Graph &g);
+
+        // this function will return if the other graph is lees than or equal than the  graph
+        bool Graph::operator<=(Graph &g);
+
+        // this function will return if the other graph is not equal to the graph
+        bool Graph::operator!=(Graph &g);
+
+        // this function will print the graph
+        friend ostream &operator<<(ostream &os, Graph &g);
     };
 }
 #endif
