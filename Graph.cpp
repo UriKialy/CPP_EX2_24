@@ -12,7 +12,7 @@ namespace ariel
         numVertices = 0;
         numEdges = 0;
         isdirected = false;
-        adjacencyMatrix = vector<vector<int>>(10, vector<int>(10, 0)); // Initialize the matrix with 10x10 zeros
+        adjacencyMatrix = vector<vector<int>>(3, vector<int>(3, 0)); // Initialize the matrix with 10x10 zeros
     }
 
     void Graph::loadGraph(vector<vector<int>> graph)
@@ -20,7 +20,6 @@ namespace ariel
         // Check if the graph is a square matrix.
         if (graph.size() != graph[0].size())
         {
-            cout << graph.size() << " " << graph[0].size() << endl;
             throw invalid_argument("The graph is not a square matrix");
         }
         if (graph.empty())
@@ -31,10 +30,9 @@ namespace ariel
             isdirected = false;
             return;
         }
-
-        numVertices = graph.size();// Load the number of vertices to the graph
         adjacencyMatrix = graph; // Load the mstrix to the graph
         int numofedges = 0;
+        numVertices = (int)graph.size(); // Set the number of vertices
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
@@ -43,26 +41,32 @@ namespace ariel
                 {
                     numofedges++;
                 }
-                if (adjacencyMatrix[i][i] != adjacencyMatrix[i][i] && adjacencyMatrix[i][i] != 0 && adjacencyMatrix[i][i] != 0)
-                {
-                    throw invalid_argument("multy-graph is not allowed");
-                }
                 if (adjacencyMatrix[i][j] != 0 && adjacencyMatrix[j][i] == 0 || adjacencyMatrix[j][i] != 0 && adjacencyMatrix[i][j] == 0)
                 {
                     isdirected = true;
                 }
-                adjacencyMatrix[i][i]=0;// remove self loops caused by matrix initialization
+                adjacencyMatrix[i][i] = 0; // remove self loops caused by matrix initialization
             }
         }
-        numEdges = (int)numofedges / 2;
-        numVertices = (int)graph.size();
+        if (isdirected)
+        {
+            numEdges = numofedges; // if the graph is directed the number of edges is the number of edges in the matrix
+        }
+        numEdges = (int)numofedges / 2; // else the number of edges is half the number of edges in the matrix
     }
     vector<vector<int>> Graph::getAdjacencyMatrix()
     {
+        if(adjacencyMatrix.empty()){
+            throw invalid_argument("The graph is empty");
+        }
         return adjacencyMatrix;
     }
     string Graph::printGraph()
     {
+        if (adjacencyMatrix.empty())
+        {
+            return "[]";
+        }
         string str = "";
         for (size_t i = 0; i < getNumVertices(); i++)
         {
@@ -120,6 +124,9 @@ namespace ariel
     // Multiplication operator
     Graph Graph::operator*(int scalar)
     {
+        if(scalar==0||this->getNumVertices()==0){
+            return Graph(); // return  empty graph
+        }
         vector<vector<int>> GraphMat = getAdjacencyMatrix();
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph graph;
@@ -141,13 +148,19 @@ namespace ariel
 
     Graph Graph::operator/(int scalar)
     {
+        if(scalar==0){
+            throw invalid_argument("Cannot divide by zero");
+        }
+        if(this->getNumVertices()==0){
+            return Graph(); // return  empty graph
+        }
         vector<vector<int>> GraphMat = getAdjacencyMatrix();
         Graph graph;
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                getAdjacencyMatrix()[i][j] /= scalar;
+                GraphMat[i][j] /= scalar;
             }
         }
         graph.loadGraph(GraphMat);
@@ -160,9 +173,18 @@ namespace ariel
     // return a the sum of the current graph and the graph g
     Graph Graph::operator+(Graph &g)
     {
+        if(numVertices==0&&g.getNumVertices()==0){
+            return Graph(); // return  empty graph
+        }
         if (numVertices != g.getNumVertices())
         {
             throw invalid_argument("The number of vertices in the two graphs must be equal.");
+        }
+        if(numVertices==0){
+            return g; // return the graph g
+        }
+        if(g.getNumVertices()==0){
+            return *this; // return the current graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph graph;
@@ -189,6 +211,15 @@ namespace ariel
         {
             throw invalid_argument("The number of vertices in the two graphs must be equal.");
         }
+        if(numVertices==0&&g.getNumVertices()==0){
+            return Graph(); // return  empty graph
+        }
+        if(numVertices==0){
+            return -g; // return the negative graph of g
+        }
+        if(g.getNumVertices()==0){
+            return *this; // return the current graph
+        }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph graph;
         for (size_t i = 0; i < numVertices; i++)
@@ -209,6 +240,9 @@ namespace ariel
 
     Graph Graph::operator-()
     {
+        if(numVertices==0){
+            return Graph(); // return  empty graph
+        }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph graph;
         for (size_t i = 0; i < numVertices; i++)
@@ -265,26 +299,27 @@ namespace ariel
 
     bool Graph::operator==(Graph &g)
     {
+
+        if (numVertices != g.getNumVertices())
+        {
+            return false;
+        }
+        if(numVertices==0&&g.getNumVertices()==0){
+            return true; // return true if both graphs are empty
+        }
+        for (size_t i = 0; i < numVertices; i++)
+        {
+            for (size_t j = 0; j < numVertices; j++)
+            {
+                if (adjacencyMatrix[i][j] != g.getAdjacencyMatrix()[i][j])
+                {
+                    return false;
+                }
+            }
+        }
         if (!(*this > g && *this < g))
         {
             return true;
-        }
-        else
-        {
-            if (numVertices != g.getNumVertices())
-            {
-                return false;
-            }
-            for (size_t i = 0; i < numVertices; i++)
-            {
-                for (size_t j = 0; j < numVertices; j++)
-                {
-                    if (adjacencyMatrix[i][j] != g.getAdjacencyMatrix()[i][j])
-                    {
-                        return false;
-                    }
-                }
-            }
         }
         return true;
     }
@@ -334,13 +369,17 @@ namespace ariel
     }
 
     Graph Graph::operator*(Graph &g)
-    {
+    {   
+
         if (numVertices != g.getNumVertices())
         {
             throw invalid_argument("The number of vertices in the two graphs must be equal.");
         }
         else
         {
+            if(numVertices==0||g.getNumVertices()==0){
+                return Graph(); // return the empty graph
+            }
             vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
             Graph graph;
             for (size_t i = 0; i < numVertices; i++)
