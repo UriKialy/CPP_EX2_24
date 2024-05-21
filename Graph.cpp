@@ -56,7 +56,8 @@ namespace ariel
     }
     vector<vector<int>> Graph::getAdjacencyMatrix()
     {
-        if(adjacencyMatrix.empty()){
+        if (adjacencyMatrix.empty())
+        {
             throw invalid_argument("The graph is empty");
         }
         return adjacencyMatrix;
@@ -124,7 +125,8 @@ namespace ariel
     // Multiplication operator
     Graph Graph::operator*(int scalar)
     {
-        if(scalar==0||this->getNumVertices()==0){
+        if (scalar == 0 || this->getNumVertices() == 0)
+        {
             return Graph(); // return  empty graph
         }
         vector<vector<int>> GraphMat = getAdjacencyMatrix();
@@ -148,10 +150,12 @@ namespace ariel
 
     Graph Graph::operator/(int scalar)
     {
-        if(scalar==0){
+        if (scalar == 0)
+        {
             throw invalid_argument("Cannot divide by zero");
         }
-        if(this->getNumVertices()==0){
+        if (this->getNumVertices() == 0)
+        {
             return Graph(); // return  empty graph
         }
         vector<vector<int>> GraphMat = getAdjacencyMatrix();
@@ -171,76 +175,84 @@ namespace ariel
         return (*this) / scalar;
     }
     // return a the sum of the current graph and the graph g
-    Graph Graph::operator+(Graph &g)
+    Graph Graph::operator+(Graph &graph1)
     {
-        if(numVertices==0&&g.getNumVertices()==0){
+        if (numVertices == 0 && graph1.getNumVertices() == 0)
+        {
             return Graph(); // return  empty graph
         }
-        if (numVertices != g.getNumVertices())
+        if (numVertices != graph1.getNumVertices())
         {
             throw invalid_argument("The number of vertices in the two graphs must be equal.");
         }
-        if(numVertices==0){
-            return g; // return the graph g
+        if (numVertices == 0)
+        {
+            return graph1; // return the graph g
         }
-        if(g.getNumVertices()==0){
+        if (graph1.getNumVertices() == 0)
+        {
             return *this; // return the current graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
-        Graph graph;
+        Graph newGraph;
 
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                newAdjacencyMatrix[i][j] = adjacencyMatrix[i][j] + g.getAdjacencyMatrix()[i][j];
+                newAdjacencyMatrix[i][j] = adjacencyMatrix[i][j] + graph1.getAdjacencyMatrix()[i][j];
             }
         }
-        graph.loadGraph(newAdjacencyMatrix);
-        return graph;
+        graph1.loadGraph(newAdjacencyMatrix);
+        return graph1;
     }
 
-    Graph Graph::operator+=(Graph &g)
+    Graph Graph::operator+=(Graph &graph)
     {
-        return *this + g;
+        return *this + graph;
     }
 
-    Graph Graph::operator-(Graph &g)
+    Graph Graph::operator-(Graph &graph1)
     {
-        if (numVertices != g.getNumVertices())
+        if (numVertices != graph1.getNumVertices())
         {
             throw invalid_argument("The number of vertices in the two graphs must be equal.");
         }
-        if(numVertices==0&&g.getNumVertices()==0){
+        if (numVertices == 0 && graph1.getNumVertices() == 0)
+        {
             return Graph(); // return  empty graph
         }
-        if(numVertices==0){
-            return -g; // return the negative graph of g
+        if (numVertices == 0)
+        {
+            return -graph1; // return the negative graph of g
         }
-        if(g.getNumVertices()==0){
+        if (graph1.getNumVertices() == 0)
+        {
             return *this; // return the current graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
-        Graph graph;
+        Graph newGraph;
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                newAdjacencyMatrix[i][j] = adjacencyMatrix[i][j] - g.getAdjacencyMatrix()[i][j];
+                newAdjacencyMatrix[i][j] = adjacencyMatrix[i][j] - graph1.getAdjacencyMatrix()[i][j];
             }
         }
-        graph.loadGraph(newAdjacencyMatrix);
-        return graph;
+        newGraph.loadGraph(newAdjacencyMatrix);
+        return newGraph;
+        
     }
 
-    Graph Graph::operator-=(Graph &g)
+    Graph Graph::operator-=(Graph &graph)
     {
-        return *this - g;
+        return *this - graph;
     }
 
     Graph Graph::operator-()
     {
-        if(numVertices==0){
+        if (numVertices == 0)
+        {
             return Graph(); // return  empty graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
@@ -297,46 +309,48 @@ namespace ariel
         }
     } //--g
 
-    bool Graph::operator==(Graph &g)
+    bool Graph::operator==(Graph &graph)
     {
 
-        if (numVertices != g.getNumVertices())
+        if (numVertices != graph.getNumVertices())
         {
+            cout<<numVertices<<" != "<< graph.getNumVertices()<<endl;
             return false;
         }
-        if(numVertices==0&&g.getNumVertices()==0){
+        if (numVertices == 0 && graph.getNumVertices() == 0)
+        {
             return true; // return true if both graphs are empty
         }
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                if (adjacencyMatrix[i][j] != g.getAdjacencyMatrix()[i][j])
+                if (adjacencyMatrix[i][j] != graph.getAdjacencyMatrix()[i][j])
                 {
                     return false;
                 }
             }
         }
-        if (!(*this > g && *this < g))
+        if (!(*this > graph && *this < graph))
         {
             return true;
         }
         return true;
     }
 
-    bool Graph::operator<(Graph &g)
+    bool Graph::operator<(Graph &graph)
     {
-        if (isContained(g, *this)) // check if this is contained in g
+        if (isContained(graph, *this)) // check if this is contained in g
         {
             return true;
         }
-        if (this->getNumEdges() < g.getNumEdges())
+        if (this->getNumEdges() < graph.getNumEdges())
         {
             return true;
         }
-        else if (numEdges == g.getNumEdges())
+        else if (numEdges == graph.getNumEdges())
         {
-            if (numVertices < g.getNumVertices())
+            if (numVertices < graph.getNumVertices())
             {
                 return true;
             }
@@ -348,65 +362,63 @@ namespace ariel
         return false;
     }
 
-    bool Graph::operator>(Graph &g)
+    bool Graph::operator>(Graph &graph)
     {
-        return g < *this;
+        return graph < *this;
     }
 
-    bool Graph::operator>=(Graph &g)
+    bool Graph::operator>=(Graph &graph)
     {
-        return (!(*this < g));
+        return (!(*this < graph));
     }
 
-    bool Graph::operator<=(Graph &g)
+    bool Graph::operator<=(Graph &graph)
     {
-        return (!(*this > g));
+        return (!(*this > graph));
     }
 
-    bool Graph::operator!=(Graph &g)
+    bool Graph::operator!=(Graph &graph)
     {
-        return !(*this == g);
+        return !(*this == graph);
     }
 
-    Graph Graph::operator*(Graph &g)
-    {   
+    Graph Graph::operator*(Graph &graph1)
+    {
 
-        if (numVertices != g.getNumVertices())
+        if (numVertices != graph1.getNumVertices())
         {
             throw invalid_argument("The number of vertices in the two graphs must be equal.");
         }
-        else
+        if (numVertices == 0 || graph1.getNumVertices() == 0)
         {
-            if(numVertices==0||g.getNumVertices()==0){
-                return Graph(); // return the empty graph
-            }
-            vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
-            Graph graph;
-            for (size_t i = 0; i < numVertices; i++)
+            return Graph(); // return the empty graph
+        }
+        vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
+        Graph newGraph;
+        for (size_t i = 0; i < numVertices; i++)
+        {
+            for (size_t j = 0; j < numVertices; j++)
             {
-                for (size_t j = 0; j < numVertices; j++)
+                for (size_t k = 0; k < numVertices; k++)
                 {
-                    for (size_t k = 0; k < numVertices; k++)
-                    {
-                        newAdjacencyMatrix[i][j] += (adjacencyMatrix[i][k] * g.getAdjacencyMatrix()[k][j]);
-                    }
+                    newAdjacencyMatrix[i][j] += (adjacencyMatrix[i][k] * graph1.getAdjacencyMatrix()[k][j]);
                 }
             }
-            graph.loadGraph(newAdjacencyMatrix);
-            return graph;
         }
+        graph1.loadGraph(newAdjacencyMatrix);
+        return graph1;
     }
 
-    ostream &operator<<(ostream &os, Graph &g)
+    ostream &operator<<(ostream &os, Graph &graph)
     {
         os << "the graph is:" << endl;
         os << "{";
-        for (size_t i = 0; i < g.getNumVertices(); i++)
+        for (size_t i = 0; i < graph.getNumVertices(); i++)
         {
             os << "[";
-            for (size_t j = 0; j < g.getNumVertices(); j++)
+            for (size_t j = 0; j < graph.getNumVertices(); j++)
             {
-                os << g.getAdjacencyMatrix()[i][j] << " ";
+                os << graph.getAdjacencyMatrix()[i][j] << " ";
             }
             os << "]";
             os << endl;
@@ -414,18 +426,18 @@ namespace ariel
         os << "}";
         return os;
     }
-    // check if g1 is contained in g2
-    bool Graph::isContained(Graph &g1, Graph &g2)
+    // check if graph1 is contained in graph2
+    bool Graph::isContained(Graph &graph1, Graph &graph2)
     {
-        if (g1.getNumVertices() > g2.getNumVertices())
+        if (graph1.getNumVertices() > graph2.getNumVertices())
         {
             return false;
         }
-        for (size_t i = 0; i < g1.getNumVertices(); i++)
+        for (size_t i = 0; i < graph1.getNumVertices(); i++)
         {
-            for (size_t j = 0; j < g1.getNumVertices(); j++)
+            for (size_t j = 0; j < graph1.getNumVertices(); j++)
             {
-                if (g2.getAdjacencyMatrix()[i][j] != 0 && g1.getAdjacencyMatrix()[i][j] == 0) // if the bigger graph has a edge and the smaller graph deosnt
+                if (graph2.getAdjacencyMatrix()[i][j] != 0 && graph1.getAdjacencyMatrix()[i][j] == 0) // if the bigger graph has a edge and the smaller graph deosnt
                 {
                     return false; // the graph is not contained cause he is missing an edge
                 }
