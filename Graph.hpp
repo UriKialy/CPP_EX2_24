@@ -46,7 +46,7 @@ namespace ariel
         Graph operator*=(int scalar);
 
         // this function will return the graph after multiplying it by another graph
-        Graph operator*(Graph &g);
+        Graph operator*(Graph &graph);
 
         // this function will return the graph after devideing it by a scalar
         Graph operator/=(int scalar);
@@ -55,16 +55,16 @@ namespace ariel
         Graph operator/(int scalar);
 
         // this function will return the graph after adding two graphs together
-        Graph operator+(Graph &g);
+        Graph operator+(Graph &graph);
 
         // this function will return the graph after adding two graphs together
-        Graph operator+=(Graph &g);
+        Graph operator+=(Graph &graph);
 
         // this function will return the graph after subtracting two graphs together
-        Graph operator-(Graph &g);
+        Graph operator-(Graph &graph);
 
         // this function will return the graph after subtracting two graphs together
-        Graph operator-=(Graph &g);
+        Graph operator-=(Graph &graph);
 
         // this func is an unary operator that will return the graph
         Graph operator-();
@@ -82,28 +82,28 @@ namespace ariel
         void operator--(int);
 
         // this function will return if the two graphs are equal
-        bool operator==(Graph &g);
+        bool operator==(Graph &graph);
 
         // this function will return if the graph is lees than the other graph
-        bool operator<(Graph &g);
+        bool operator<(Graph &graph);
 
         // this function will return if the other graph is lees than the  graph
-        bool operator>(Graph &g);
+        bool operator>(Graph &graph);
 
         // this function will return if the other graph is lees than or equal than the  graph
-        bool operator>=(Graph &g);
+        bool operator>=(Graph &graph);
 
         // this function will return if the other graph is lees than or equal than the  graph
-        bool operator<=(Graph &g);
+        bool operator<=(Graph &graph);
 
         // this function will return if the other graph is not equal to the graph
-        bool operator!=(Graph &g);
+        bool operator!=(Graph &graph);
 
         // this function will check if g1 is contained in g2
-        bool isContained(Graph &g1, Graph &g2);
+        bool isContained(Graph &graph1, Graph &graph2);
 
         // this function will print the graph
-        friend ostream &operator<<(ostream &os, Graph &g);
+        friend ostream &operator<<(ostream &os, Graph &graph);
 
     };
 }
