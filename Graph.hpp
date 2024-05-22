@@ -22,16 +22,16 @@ namespace ariel
         string printGraph();
 
         // this function will return the adjacency matrix of the graph
-        vector<vector<int>> getAdjacencyMatrix();
+        vector<vector<int>> getAdjacencyMatrix() ;
 
         // this function will return the number of vertices in the graph
-        size_t getNumVertices();
+        size_t getNumVertices() const;
 
         // this function will return the number of edges in the graph
-        int getNumEdges();
+        int getNumEdges()const;
 
         // this function will return true if the graph is directed and false if it is not
-        bool isDirected();
+        bool isDirected()const;
 
         // this func will return the reverse graph
         Graph getTranspose();
@@ -67,7 +67,7 @@ namespace ariel
         Graph operator-=(Graph &graph);
 
         // this func is an unary operator that will return the graph
-        Graph operator-();
+        Graph operator-()const;
 
         // this function will return the graph after addung 1 to each edge in the graph
         void operator++();
@@ -100,7 +100,7 @@ namespace ariel
         bool operator!=(Graph &graph);
 
         // this function will check if g1 is contained in g2
-        bool isContained(Graph &graph1, Graph &graph2);
+        static bool isContained(Graph &graph1, Graph &graph2);
 
         // this function will print the graph
         friend ostream &operator<<(ostream &os, Graph &graph);
