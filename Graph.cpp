@@ -1,13 +1,13 @@
 #include "Graph.hpp"
 #include <vector>
 using namespace std;
+
 namespace ariel
 {
-    // int numVertices;
-    // int numEdges;
-    // vector<vector<int>> adjacencyMatrix;
-    // bool isdirected;
+    // Constructor
     Graph::Graph(): numVertices(0), numEdges(0), isdirected(false), adjacencyMatrix(3, vector<int>(3, 0)) {}
+
+    // Load the graph from a given matrix
     void Graph::loadGraph(vector<vector<int>> graph)
     {
         // Check if the graph is a square matrix.
@@ -19,11 +19,11 @@ namespace ariel
         {
             numVertices = 0;
             numEdges = 0;
-            adjacencyMatrix = {}; // Already empty vector
+            adjacencyMatrix = {}; 
             isdirected = false;
             return;
         }
-        adjacencyMatrix = graph; // Load the mstrix to the graph
+        adjacencyMatrix = graph; // Load the matrix to the graph
         int numofedges = 0;
         numVertices = (int)graph.size(); // Set the number of vertices
         for (size_t i = 0; i < numVertices; i++)
@@ -38,15 +38,17 @@ namespace ariel
                 {
                     isdirected = true;
                 }
-                adjacencyMatrix[i][i] = 0; // remove self loops caused by matrix initialization
+                adjacencyMatrix[i][i] = 0; // Remove self loops caused by matrix initialization
             }
         }
         if (isdirected)
         {
-            numEdges = numofedges; // if the graph is directed the number of edges is the number of edges in the matrix
+            numEdges = numofedges; // If the graph is directed, the number of edges is the number of edges in the matrix
         }
-        numEdges = (int)numofedges / 2; // else the number of edges is half the number of edges in the matrix
+        numEdges = (int)numofedges / 2; // Otherwise, the number of edges is half the number of edges in the matrix
     }
+
+    // Get the adjacency matrix of the graph
     vector<vector<int>> Graph::getAdjacencyMatrix()
     {
         if (adjacencyMatrix.empty())
@@ -55,6 +57,8 @@ namespace ariel
         }
         return adjacencyMatrix;
     }
+
+    // Print the graph as a string
     string Graph::printGraph()
     {
         if (adjacencyMatrix.empty())
@@ -82,18 +86,25 @@ namespace ariel
         return str;
     }
 
+    // Get the number of vertices in the graph
     size_t Graph::getNumVertices() const
     {
         return (size_t)this->numVertices;
     }
+
+    // Get the number of edges in the graph
     int Graph::getNumEdges() const
     {
         return this->numEdges;
     }
+
+    // Check if the graph is directed
     bool Graph::isDirected() const
     {
         return isdirected;
     }
+
+    // Get the transpose of the graph
     Graph Graph::getTranspose()
     {
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
@@ -102,7 +113,7 @@ namespace ariel
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                newAdjacencyMatrix[i][j] = adjacencyMatrix[j][i];
+                newAdjacencyMatrix[i][j] = adjacencyMatrix[j][i]; // Assign the transpose of the matrix
             }
         }
         graph.loadGraph(newAdjacencyMatrix);
@@ -112,7 +123,7 @@ namespace ariel
     // Unary + operator
     Graph Graph::operator+()
     {
-        return *this; // return a reference to the current graph
+        return *this; // Return a reference to the current graph
     }
 
     // Multiplication operator
@@ -120,59 +131,64 @@ namespace ariel
     {
         if (scalar == 0 || this->getNumVertices() == 0)
         {
-            return Graph(); // return  empty graph
+            return Graph(); // Return an empty graph
         }
-        vector<vector<int>> GraphMat = getAdjacencyMatrix();
-        vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
-        Graph graph;
+        vector<vector<int>> GraphMat = getAdjacencyMatrix(); // Get the adjacency matrix of the graph
+        vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0)); // Create a new matrix for the new graph
+        Graph graph; // Create a new graph
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                newAdjacencyMatrix[i][j] = GraphMat[i][j] * scalar;
+                newAdjacencyMatrix[i][j] = GraphMat[i][j] * scalar; // Multiply each element in the matrix by the scalar
             }
         }
-        graph.loadGraph(newAdjacencyMatrix);
+        graph.loadGraph(newAdjacencyMatrix); // Load the new matrix to the graph
         return graph;
     }
 
+    // Multiplication assignment operator
     Graph Graph::operator*=(int scalar)
     {
-        return (*this) * scalar;
+        return (*this) * scalar; // Return the graph after multiplying it by the scalar
     }
 
+    // Division operator
     Graph Graph::operator/(int scalar)
     {
         if (scalar == 0)
         {
-            throw invalid_argument("Cannot divide by zero");
+            throw invalid_argument("Cannot divide by zero"); // Throw an exception if the scalar is zero
         }
         if (this->getNumVertices() == 0)
         {
-            return Graph(); // return  empty graph
+            return Graph(); // Return an empty graph
         }
         vector<vector<int>> GraphMat = getAdjacencyMatrix();
-        Graph graph;
+        Graph graph; // Create a new graph
         for (size_t i = 0; i < numVertices; i++)
         {
             for (size_t j = 0; j < numVertices; j++)
             {
-                GraphMat[i][j] /= scalar;
+                GraphMat[i][j] /= scalar; // Divide each element in the matrix by the scalar
             }
         }
         graph.loadGraph(GraphMat);
         return graph;
     }
+
+    // Division assignment operator
     Graph Graph::operator/=(int scalar)
     {
         return (*this) / scalar;
     }
-    // return a the sum of the current graph and the graph g
+
+    // Addition operator
     Graph Graph::operator+(Graph &graph1)
     {
         if (numVertices == 0 && graph1.getNumVertices() == 0)
         {
-            return Graph(); // return  empty graph
+            return Graph(); // Return an empty graph
         }
         if (numVertices != graph1.getNumVertices())
         {
@@ -180,11 +196,11 @@ namespace ariel
         }
         if (numVertices == 0)
         {
-            return graph1; // return the graph g
+            return graph1; // Return the graph g
         }
         if (graph1.getNumVertices() == 0)
         {
-            return *this; // return the current graph
+            return *this; // Return the current graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph newGraph;
@@ -200,11 +216,13 @@ namespace ariel
         return graph1;
     }
 
+    // Addition assignment operator
     Graph Graph::operator+=(Graph &graph)
     {
         return *this + graph;
     }
 
+    // Subtraction operator
     Graph Graph::operator-(Graph &graph1)
     {
         if (numVertices != graph1.getNumVertices())
@@ -213,15 +231,15 @@ namespace ariel
         }
         if (numVertices == 0 && graph1.getNumVertices() == 0)
         {
-            return Graph(); // return  empty graph
+            return Graph(); // Return an empty graph
         }
         if (numVertices == 0)
         {
-            return -graph1; // return the negative graph of g
+            return -graph1; // Return the negative graph of g
         }
         if (graph1.getNumVertices() == 0)
         {
-            return *this; // return the current graph
+            return *this; // Return the current graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph newGraph;
@@ -236,16 +254,18 @@ namespace ariel
         return newGraph;
     }
 
+    // Subtraction assignment operator
     Graph Graph::operator-=(Graph &graph)
     {
         return *this - graph;
     }
 
+    // Unary minus operator
     Graph Graph::operator-()const
     {
         if (numVertices == 0)
         {
-            return Graph(); // return  empty graph
+            return Graph(); // Return an empty graph
         }
         vector<vector<int>> newAdjacencyMatrix = vector<vector<int>>((size_t)numVertices, vector<int>((size_t)numVertices, 0));
         Graph graph;
@@ -260,6 +280,7 @@ namespace ariel
         return graph;
     }
 
+    // Prefix increment operator
     void Graph::operator++()
     {
         for (size_t i = 0; i < numVertices; i++)
@@ -269,7 +290,9 @@ namespace ariel
                 adjacencyMatrix[i][j]++;
             }
         }
-    } // g++
+    }
+
+    // Prefix decrement operator
     void Graph::operator--()
     {
         for (size_t i = 0; i < numVertices; i++)
@@ -280,6 +303,8 @@ namespace ariel
             }
         }
     } // g--
+
+    // Postfix increment operator
     void Graph::operator++(int)
     {
         for (size_t i = 0; i < numVertices; i++)
@@ -290,6 +315,8 @@ namespace ariel
             }
         }
     } //++g
+
+    // Postfix decrement operator
     void Graph::operator--(int)
     {
         for (size_t i = 0; i < numVertices; i++)
@@ -301,6 +328,7 @@ namespace ariel
         }
     } //--g
 
+    // Equality operator
     bool Graph::operator==(Graph &graph)
     {
         if (numVertices == 0 && graph.getNumVertices() == 0)
@@ -331,32 +359,38 @@ namespace ariel
         return first || last;
     }
 
+    // Less than operator
     bool Graph::operator<(Graph &graph)
     {
         return (Graph::isContained(graph, *this) || (this->getNumEdges() < graph.getNumEdges()) // check if this is contained in g or that have less edges
                 || (numEdges == graph.getNumEdges() && numVertices < graph.getNumVertices()));  // if numofedges is equal check the number of vertices
     }
 
+    // Greater than operator
     bool Graph::operator>(Graph &graph)
     {
         return graph < *this;
     }
 
+    // Greater than or equal to operator
     bool Graph::operator>=(Graph &graph)
     {
         return (!(*this < graph));
     }
 
+    // Less than or equal to operator
     bool Graph::operator<=(Graph &graph)
     {
         return (!(*this > graph));
     }
 
+    // Not equal to operator
     bool Graph::operator!=(Graph &graph)
     {
         return !(*this == graph);
     }
 
+    // Matrix multiplication operator
     Graph Graph::operator*(Graph &graph1)
     {
 
@@ -384,6 +418,7 @@ namespace ariel
         return graph1;
     }
 
+    // Output stream operator
     ostream &operator<<(ostream &osStream, Graph &graph)
     {
         osStream << "the graph is:" << endl;
@@ -401,8 +436,9 @@ namespace ariel
         osStream << "}";
         return osStream;
     }
-    // check if graph1 is contained in graph2
-     bool Graph::isContained(Graph &graph1, Graph &graph2)
+
+    // Check if graph1 is contained in graph2
+    bool Graph::isContained(Graph &graph1, Graph &graph2)
     {
         if (graph1.getNumVertices() > graph2.getNumVertices())
         {
@@ -412,10 +448,10 @@ namespace ariel
         {
             for (size_t j = 0; j < graph1.getNumVertices(); j++)
             {
-                if (graph2.getAdjacencyMatrix()[i][j] != 0 && graph1.getAdjacencyMatrix()[i][j] == 0 // if the bigger graph has a edge and the smaller graph doesnt
+                if (graph2.getAdjacencyMatrix()[i][j] != 0 && graph1.getAdjacencyMatrix()[i][j] == 0 // if the bigger graph has an edge and the smaller graph doesn't
                     || graph1.getAdjacencyMatrix()[i][j] != 0 && graph2.getAdjacencyMatrix()[i][j] == 0)
-                {                 // if the smaller graph has a edge and the bigger graph doesnt
-                    return false; // the graph is not contained cause he is missing an edge
+                {                 // if the smaller graph has an edge and the bigger graph doesn't
+                    return false; // the graph is not contained because it is missing an edge
                 }
             }
         }
